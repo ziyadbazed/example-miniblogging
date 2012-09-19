@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="css/style.default.css" type="text/css" />
+	<script type="text/javascript" src="js/jquery-1.7.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		var socket = io.connect('http://localhost');
+		socket.on('feed', function (content) {
+			jQuery('.updatelist').prepend('<li><div class="updatethumb"><img src="images/avatar1.png" alt="" /></div><div class="updatecontent"><div class="top"><a href="" class="user">User</a></div><div class="text">' + content.data.text + '</div></div></li>');
+		});
+		function postStatus() {
+			var content = jQuery('#statustext').val();
+			if (content) {
+				socket.emit('post', {text: content});
+				jQuery('#statustext').val('');
+				jQuery('.updatelist').prepend('<li><div class="updatethumb"><img src="images/avatar1.png" alt="" /></div><div class="updatecontent"><div class="top"><a href="" class="user">User</a></div><div class="text">' + content + '</div></div></li>');
+			}
+		}
+	</script>
+</head>
+
+<body class="withvernav">
+	<div class="bodywrapper">
+		<div class="centercontent">
+			<div class="contentwrapper">
+				<div class="two_third newsfeed">
+					<div id="status" class="subcontent">
+					
+						<div class="statusbox">
+	                            <div class="status_thumb"><img src="/images/avatarbig.png" alt="" width="57" /></div>
+	                            <div class="status_content">
+	                                <textarea name="" cols="" rows="" id="statustext"></textarea>
+	                            </div>
+	                            <div class="submit"><button class="stdbtn btn_yellow" onclick="postStatus()">Post</button></div>
+	                    </div><!--statusbox-->
+	                                    
+	                    
+	                    <br clear="all" /><br />
+	                    
+	                </div><!-- #updates -->
+	                
+	                <br />
+	                
+	                <ul class="updatelist">
+		                <%
+		                data.forEach(function(item) {
+		                %> 
+		                	<li>
+		                    	<div class="updatethumb"><img src="images/avatar1.png" alt="" /></div>
+		                        <div class="updatecontent">
+		                        	<div class="top">
+		                            	<a href="" class="user">User</a>
+		                            </div><!--top-->
+		                            <div class="text">
+		                            	<%= item.text %>
+		                            </div><!--text-->
+		                        </div><!--updatecontent-->
+		                    </li>
+	                    <%
+		                });
+		                %> 
+	                </ul>
+	                
+	
+	            </div><!--two_third newsfeed-->
+	            
+	            <br clear="all" />
+	        
+	        </div><!--contentwrapper-->
+		</div><!-- centercontent -->
+	</div><!--bodywrapper-->
+</body>
+</html>
