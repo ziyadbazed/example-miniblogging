@@ -42,7 +42,7 @@ console.timeEnd('InitializeServer');
 app.get('/', function(req, res, next) {
 	db.collection('post').find({}, {limit:50, sort:[['date', -1]]}).toArray(function (error, posts) {
 		if (error) {
-			console.err(error);
+			console.error(error);
 		}
 		res.render('newsfeed', {data: posts});
 	});
@@ -52,7 +52,7 @@ io.sockets.on('connection', function (socket) {
   socket.on('post', function (data) {
     db.collection('post').save({text: data.text, date: new Date()}, function(err, result) {
 		if (err) {
-			console.err(err);
+			console.error(err);
 		} else {
 			socket.broadcast.emit('feed', {data: result});
 		}
